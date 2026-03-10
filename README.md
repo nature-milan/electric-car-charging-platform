@@ -69,7 +69,7 @@ To reset the simulation, refresh the webpage.
 
 ## Overview
 
-I chose a **dashboard layout** for the charge control panel so that all
+A **dashboard layout** for the charge control panel was chosen so that all
 relevant information is visible at once. This avoids hiding
 functionality behind sidebars and allows users to quickly understand the
 current charging state and take action.
@@ -503,17 +503,6 @@ The following values are stored:
 
 This allows the UI to behave like a persistent application even though
 Streamlit reruns the script on every interaction.
-
-------------------------------------------------------------------------
-
-# Testing
-
-For the purposes of this exercise I focused on implementing the
-charging simulation and UI behaviour. In a production environment I
-would add unit tests around the core charging logic (e.g. schedule
-windows, manual override behaviour, SOC evolution) by extracting the
-pure logic from Streamlit session state.
-
 
 ------------------------------------------------------------------------
 # Summary
