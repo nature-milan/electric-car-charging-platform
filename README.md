@@ -1,6 +1,6 @@
 # EV Charge Control Panel
 
-![Charge Control Panel Screenshot](docs/screenshot.png)
+![Charge Control Panel Screenshot](assets/screenshot.png)
 
 This project implements a **charge control panel** for an electric
 vehicle charging application. The interface allows users to:
