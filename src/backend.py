@@ -58,6 +58,10 @@ def _time_until_full(soc: float) -> timedelta:
 
 
 def _expire_windows(state: BackendState, now: datetime) -> None:
+    """
+    Removes expired manual override or schedule pause windows
+    once the simulated time passes their end time.
+    """
     if state.override_until is not None and now >= state.override_until:
         state.override_until = None
     if (
@@ -72,6 +76,10 @@ def _charger_state_at(
     state: BackendState,
     now: datetime,
 ) -> ChargerState:
+    """
+    Determines whether the car should be charging at a specific moment
+    and whether that charging is manual or scheduled.
+    """
     if not demo_state.car_is_plugged_in or state.soc >= 1.0:
         return ChargerState(car_is_charging=False, charge_is_override=False)
 
@@ -99,6 +107,10 @@ def _apply_charging_step(
     end: datetime,
     charge_is_override: bool,
 ) -> None:
+    """
+    Applies the SOC increase for one charging interval and handles the
+    special case where the battery reaches full before the interval ends.
+    """
     step = end - start
     time_to_full = _time_until_full(state.soc)
 
@@ -121,6 +133,10 @@ def _replay_interval(
     start: datetime,
     end: datetime,
 ) -> None:
+    """
+    Simulates the battery and charger behaviour between two timestamps by
+    advancing time in 30-minute steps and applying charging logic when appropriate.
+    """
     current = start
     while current < end:
         next_time = min(current + PLOT_STEP, end)
@@ -141,6 +157,11 @@ def _replay_interval(
 
 
 def _rebuild_state(demo_state: DemoAdminState) -> BackendState:
+    """
+    Reconstructs the current battery state by starting from the initial SOC
+    and replaying all charging behaviour from the simulation start time up
+    to the current simulated time.
+    """
     now = demo_state.current_time
     rebuilt = BackendState(
         soc=INITIAL_SOC,
@@ -176,6 +197,9 @@ def get_backend_snapshot() -> BackendState:
 
 
 def get_max_manual_charge_minutes(soc: float) -> int:
+    """
+    Maximum minutes for manual charging rounded to 30 mins.
+    """
     if soc >= 1.0:
         return 0
     remaining_minutes = int(((1.0 - _clamp_soc(soc)) / CHARGE_RATE_PER_HOUR) * 60)
